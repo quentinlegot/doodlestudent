@@ -7,7 +7,7 @@ jobs:
     name: Deploy to server
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@4.1.1
+      - uses: actions/checkout@v4
       - name: Add password to a file
         env:
           VM_PASS: ${{ secrets.VM_PASSWORD }}
@@ -18,7 +18,7 @@ jobs:
           touch "${VM_IP}.yml"
           echo "vault_ansible_ssh_pass: ${VM_PASS}\n" > "host_vars/${VM_IP}.yml"
       - name: Run playbook
-        uses: aimerib/ansible-playwright@v2
+        uses: dawidd6/action-ansible-playbook@v2
         with: 
           playbook: deploy.yml
           directory: ./ansible
