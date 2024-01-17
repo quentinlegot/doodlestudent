@@ -13,7 +13,12 @@
   pip:
     name: [ "docker" ]
     state: latest
+# - name: (Re)Build and run/restart containers # doesn't support compose v2
+#   docker_compose:
+#     project_src: "/home/{{ user }}/doodle"
+#     build: yes
 - name: (Re)Build and run/restart containers
-  docker_compose:
-    project_src: "/home/{{ user }}/doodle"
-    build: yes
+  command: |
+    "cd /home/{{ user }}/doodle"
+    "docker compose build"
+    "docker compose up -d"
