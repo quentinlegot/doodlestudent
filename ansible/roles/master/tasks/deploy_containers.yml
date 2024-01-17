@@ -20,4 +20,4 @@
 - name: (Re)Build and run/restart containers
   command:
     chdir: "/home/{{ user }}/doodle"
-    cmd: "docker compose build && docker compose up -d"
+    cmd: "docker compose up -d --build"
