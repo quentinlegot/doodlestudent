@@ -1,0 +1,15 @@
+
+- name: Install git
+  apt:
+    name: [ git ]
+    update_cache: true
+    state: latest
+- name: Clone project
+  git:
+    repo: 'https://github.com/quentinlegot/doodlestudent'
+    dest: "/home/{{ user }}/doodle"
+    depth: 1
+- name: (Re)Build and run/restart containers
+  docker_compose:
+    project_src: "/home/{{ user }}/doodle"
+    build: yes
