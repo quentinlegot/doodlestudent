@@ -1,5 +1,9 @@
 version: "3.8"
 services:
+  api:
+    build: api
+    ports:
+      - "8080:8080"
   db:
     image: mysql
     ports:
@@ -10,16 +14,17 @@ services:
       - MYSQL_USER=tlc
       - MYSQL_PASSWORD=tlc
   etherpad:
-    image: etherpad/etherpad:stable
+    image: etherpad/etherpad
     ports:
       - "9001:9001"
     volumes:
-      - ./APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
+      - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
   mail:
     image: bytemark/smtp
     restart: always
     ports:
       - "2525:25"
-  api:
-    build: .
-    
+  front:
+    build: front
+    ports:
+      - "80:80"
