@@ -18,7 +18,6 @@
 #     project_src: "/home/{{ user }}/doodle"
 #     build: yes
 - name: (Re)Build and run/restart containers
-  command: |
-    "cd /home/{{ user }}/doodle"
-    "docker compose build"
-    "docker compose up -d"
+  command:
+    chdir: "/home/{{ user }}/doodle"
+    cmd: "docker compose build && docker compose up -d"
