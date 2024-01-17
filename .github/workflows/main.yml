@@ -8,6 +8,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@4.1.1
+      - name: Add password to a file
+        env:
+          VM_PASS: ${{ secrets.VM_PASSWORD }}
+          VM_IP: ${{ secrets.VM_IP }}
+        run: |
+          cd ansible
+          mkdir host_vars
+          touch "${VM_IP}.yml"
+          echo "vault_ansible_ssh_pass: ${VM_PASS}\n" > "host_vars/${VM_IP}.yml"
+      - name: Run playbook
+        uses: aimerib/ansible-playwright@v2
+        with: 
+          playbook: deploy.yml
+          directory: ./ansible
+          options: |
+            -i hosts
+          
       
       
     
