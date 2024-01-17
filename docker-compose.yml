@@ -26,5 +26,7 @@ services:
       - "2525:25"
   front:
     build: front
+    depends_on:
+      - "api"
     ports:
       - "80:80"

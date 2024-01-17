@@ -8,12 +8,15 @@ WORKDIR /opt/app
 
 COPY . .
 
+
 RUN npm ci
 RUN npm run build
 
 FROM nginx:latest as runner
 
 EXPOSE 80
+
+COPY nginx.conf /etc/nginx/nginx.conf
 
 COPY --from=builder /opt/app/dist/tlcfront /usr/share/nginx/html
 
