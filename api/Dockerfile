@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:22.04 as builder
 
 WORKDIR /opt/dep
 
@@ -24,6 +24,27 @@ COPY mvnw .
 
 RUN ./mvnw clean package -Dquarkus.package.type=uber-jar
 
+FROM ubuntu:22.04 as runner
+
+WORKDIR /opt/dep
+
+RUN apt update -y && apt install -y wget
+
+RUN wget https://github.com/graalvm/mandrel/releases/download/mandrel-23.0.2.1-Final/mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
+RUN tar -xf mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
+RUN rm mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
+
+RUN apt remove -y wget
+RUN apt clean -y && apt autoclean -y && apt autoremove -y
+
+ENV JAVA_HOME="/opt/dep/mandrel-java17-23.0.2.1-Final"
+ENV GRAALVM_HOME="${JAVA_HOME}"
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
+
+WORKDIR /opt/app
+
+COPY --from=builder /opt/app/target/tlcdemoApp-1.0.0-SNAPSHOT-runner.jar app.jar
+
 EXPOSE 8080
 
-CMD ["java", "-jar", "/opt/app/target/tlcdemoApp-1.0.0-SNAPSHOT-runner.jar"]
+CMD ["java", "-jar", "/opt/app/app.jar"]
