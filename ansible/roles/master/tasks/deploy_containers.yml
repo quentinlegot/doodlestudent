@@ -10,10 +10,18 @@
     dest: "/home/{{ user }}/doodle"
     depth: 1
     force: yes
-- name: Install docker pip module
-  pip:
-    name: [ "docker" ]
-    state: latest
+- name: Create secret file 1
+  copy:
+    dest: "/home/{{ user }}/doodle/db_pass.txt"
+    content: "{{ db_pass }}"
+- name: Create secret file 2
+  copy:
+    dest: "/home/{{ user }}/doodle/db_root_pass.txt"
+    content: "{{ db_root_pass }}"
+# - name: Install docker pip module
+#   pip:
+#     name: [ "docker" ]
+#     state: latest
 # - name: (Re)Build and run/restart containers # doesn't support compose v2
 #   docker_compose:
 #     project_src: "/home/{{ user }}/doodle"

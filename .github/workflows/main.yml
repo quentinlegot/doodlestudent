@@ -18,13 +18,13 @@ jobs:
           DB_PASS: ${{ secrets.DB_PASS }}
           DB_ROOT_PASS: ${{ secrets.DB_ROOT_PASS }}
         run: |
-          touch db_pass.txt && echo $DB_PASS > db_pass.txt
-          touch db_root_pass.txt && echo $DB_ROOT_PASS > db_root_pass.txt
           cd ansible
           mkdir host_vars
           touch "${VM_IP}.yml"
           echo "vault_ansible_ssh_user: ${VM_USER}" >> "host_vars/${VM_IP}.yml"
           echo "vault_ansible_ssh_pass: ${VM_PASS}" >> "host_vars/${VM_IP}.yml"
+          echo "vault_pass: ${DB_PASS}" >> "host_vars/${VM_IP}.yml"
+          echo "vault_root_pass: ${DB_ROOT_PASS}" >> "host_vars/${VM_IP}.yml"
       - name: Run playbook
         uses: dawidd6/action-ansible-playbook@v2
         with: 
