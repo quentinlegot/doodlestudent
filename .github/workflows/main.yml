@@ -15,7 +15,11 @@ jobs:
           VM_USER: ${{ secrets.VM_USER }}
           VM_PASS: ${{ secrets.VM_PASSWORD }}
           VM_IP: ${{ secrets.VM_IP }}
+          DB_PASS: ${{ secrets.DB_PASS }}
+          DB_ROOT_PASS: ${{ secrets.DB_ROOT_PASS }}
         run: |
+          touch db_pass.txt && echo $DB_PASS > db_pass.txt
+          touch db_root_pass.txt && echo $DB_ROOT_PASS > db_root_pass.txt
           cd ansible
           mkdir host_vars
           touch "${VM_IP}.yml"
