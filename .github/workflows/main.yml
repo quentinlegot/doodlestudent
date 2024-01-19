@@ -11,24 +11,24 @@ jobs:
       - name: "Login to github registry"
         run: |
           export CR_PAT=$TOKEN
-          echo $CR_PAT | docker login hub.docker.com -u quentinlegot --password-stdin
+          echo $CR_PAT | docker login -u quentinlegot --password-stdin
         env:
           TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: "Compile and push front"
         run: |
           cd front
-          docker build -t hub.docker.com/quentinlegot/tlc-front:latest .
-          docker push hub.docker.com/quentinlegot/tlc-front:latest
+          docker build -t quentinlegot/tlc-front:latest .
+          docker push quentinlegot/tlc-front:latest
       - name: "Compile and push api"
         run: |
           cd api
-          docker build -t hub.docker.com/quentinlegot/tlc-api:latest .
-          docker push hub.docker.com/quentinlegot/tlc-api:latest
+          docker build -t quentinlegot/tlc-api:latest .
+          docker push quentinlegot/tlc-api:latest
       - name: "Compile and push db"
         run: |
           cd db
-          docker build -t hub.docker.com/quentinlegot/tlc-db:latest .
-          docker push hub.docker.com/quentinlegot/tlc-db:latest
+          docker build -t quentinlegot/tlc-db:latest .
+          docker push quentinlegot/tlc-db:latest
   deploy:
     name: Deploy to server
     runs-on: self-hosted
