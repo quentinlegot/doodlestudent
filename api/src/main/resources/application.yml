@@ -24,7 +24,7 @@ quarkus:
   mailer:
     from: test@quarkus.io
 #    host: smtp.sendgrid.net
-    host: localhost
+    host: mail
     port: 2525
 #    port: 465
 #    ssl: true

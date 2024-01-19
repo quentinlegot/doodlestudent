@@ -2,10 +2,14 @@ version: "3.8"
 services:
   api:
     build: api
+    restart: unless-stopped
+    depends_on:
+      - db
     # ports:
     #   - "8080:8080"
   db:
     image: mysql
+    restart: unless-stopped
     ports:
       - "3306:3306"
     environment:
@@ -18,6 +22,7 @@ services:
       - db_root_pass
   etherpad:
     image: etherpad/etherpad
+    restart: unless-stopped
     # ports:
     #   - "9001:9001"
     volumes:
@@ -32,11 +37,12 @@ services:
       - db_pass
   mail:
     image: bytemark/smtp
-    restart: always
+    restart: unless-stopped
     ports:
       - "2525:25"
   front:
     build: front
+    restart: unless-stopped
     depends_on:
       - "api"
       - "etherpad"
