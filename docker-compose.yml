@@ -4,11 +4,12 @@ services:
     build: api
     restart: unless-stopped
     depends_on:
-      - db
-    # ports:
-    #   - "8080:8080"
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
   db:
-    image: mysql
+    build: db
     restart: unless-stopped
     ports:
       - "3306:3306"

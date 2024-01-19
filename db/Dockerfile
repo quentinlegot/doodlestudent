@@ -1,0 +1,5 @@
+FROM mariadb
+
+ENV MARIADB_MYSQL_LOCALHOST_USER=1
+
+HEALTHCHECK CMD ["healthcheck.sh", "--su=mysql", "--connect", "--innodb_initialized"]

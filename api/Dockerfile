@@ -1,50 +1,26 @@
-FROM ubuntu:22.04 as builder
+## Stage 1 : build with maven builder image with native capabilities
+FROM quay.io/quarkus/ubi-quarkus-mandrel-builder-image:jdk-17 AS build
+COPY --chown=quarkus:quarkus mvnw /code/mvnw
+COPY --chown=quarkus:quarkus .mvn /code/.mvn
+COPY --chown=quarkus:quarkus pom.xml /code/
+USER quarkus
+WORKDIR /code
+# RUN ./mvnw -B org.apache.maven.plugins:maven-dependency-plugin:3.1.2:go-offline
+COPY src /code/src
+RUN ./mvnw package -Dnative
 
-WORKDIR /opt/dep
+## Stage 2 : create the docker final image
+FROM quay.io/quarkus/quarkus-micro-image:2.0
+WORKDIR /work/
+COPY --from=build /code/target/*-runner /work/application
 
-RUN apt update -y && apt install -y build-essential libz-dev zlib1g-dev wget
-
-RUN wget https://github.com/graalvm/mandrel/releases/download/mandrel-23.0.2.1-Final/mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
-RUN tar -xf mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
-
-# RUN wget https://dlcdn.apache.org/maven/maven-3/3.9.6/binaries/apache-maven-3.9.6-bin.tar.gz
-# RUN tar -xzf apache-maven-3.9.6-bin.tar.gz
-
-ENV JAVA_HOME="/opt/dep/mandrel-java17-23.0.2.1-Final"
-ENV GRAALVM_HOME="${JAVA_HOME}"
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
-# ENV PATH="./apache-maven-3.9.6/bin:${PATH}"
-
-WORKDIR /opt/app
-
-COPY src .
-COPY pom.xml .
-COPY .mvn .mvn
-COPY mvnw .
-
-RUN ./mvnw clean package -Dquarkus.package.type=uber-jar
-
-FROM ubuntu:22.04 as runner
-
-WORKDIR /opt/dep
-
-RUN apt update -y && apt install -y wget
-
-RUN wget https://github.com/graalvm/mandrel/releases/download/mandrel-23.0.2.1-Final/mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
-RUN tar -xf mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
-RUN rm mandrel-java17-linux-amd64-23.0.2.1-Final.tar.gz
-
-RUN apt remove -y wget
-RUN apt clean -y && apt autoclean -y && apt autoremove -y
-
-ENV JAVA_HOME="/opt/dep/mandrel-java17-23.0.2.1-Final"
-ENV GRAALVM_HOME="${JAVA_HOME}"
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
-
-WORKDIR /opt/app
-
-COPY --from=builder /opt/app/target/tlcdemoApp-1.0.0-SNAPSHOT-runner.jar app.jar
+# set up permissions for user `1001`
+RUN chmod 775 /work /work/application \
+  && chown -R 1001 /work \
+  && chmod -R "g+rwX" /work \
+  && chown -R 1001:root /work
 
 EXPOSE 8080
+USER 1001
 
-CMD ["java", "-jar", "/opt/app/app.jar"]
+CMD ["./application", "-Dquarkus.http.host=0.0.0.0"]
