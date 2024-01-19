@@ -13,6 +13,8 @@ services:
     restart: unless-stopped
     ports:
       - "3306:3306"
+    volumes:
+      - db:/var/lib/mysql
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_pass
       MYSQL_DATABASE: tlc
@@ -55,3 +57,6 @@ secrets:
     file: ./db_pass.txt
   db_root_pass:
     file: ./db_root_pass.txt
+
+volumes:
+  db:
