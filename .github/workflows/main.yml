@@ -10,25 +10,25 @@ jobs:
       - uses: actions/checkout@v4
       - name: "Login to github registry"
         run: |
-          export CR_PAT=$GITHUB_TOKEN
-          echo $CR_PAT | docker login ghcr.io -u quentinlegot --password-stdin
+          export CR_PAT=$TOKEN
+          echo $CR_PAT | docker login hub.docker.com -u quentinlegot --password-stdin
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: "Compile and push front"
         run: |
           cd front
-          docker build -t ghrc.io/quentinlegot/tlc-front:latest .
-          docker push ghrc.io/quentinlegot/tlc-front:latest
+          docker build -t hub.docker.com/quentinlegot/tlc-front:latest .
+          docker push hub.docker.com/quentinlegot/tlc-front:latest
       - name: "Compile and push api"
         run: |
           cd api
-          docker build -t ghrc.io/quentinlegot/tlc-api:latest .
-          docker push ghrc.io/quentinlegot/tlc-api:latest
+          docker build -t hub.docker.com/quentinlegot/tlc-api:latest .
+          docker push hub.docker.com/quentinlegot/tlc-api:latest
       - name: "Compile and push db"
         run: |
           cd db
-          docker build -t ghrc.io/quentinlegot/tlc-db:latest .
-          docker push ghrc.io/quentinlegot/tlc-db:latest
+          docker build -t hub.docker.com/quentinlegot/tlc-db:latest .
+          docker push hub.docker.com/quentinlegot/tlc-db:latest
   deploy:
     name: Deploy to server
     runs-on: self-hosted
