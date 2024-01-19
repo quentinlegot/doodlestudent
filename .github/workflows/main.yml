@@ -3,9 +3,34 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
+  build:
+    name: Build and deploy on github registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Login to github registry"
+        run: |
+          export CR_PAT=YOUR_TOKEN
+          echo $CR_PAT | docker login ghcr.io -u quentinlegot --password-stdin
+      - name: "Compile and push front"
+        run: |
+          cd front
+          docker build -t ghrc.io/quentinlegot/tlc-front:latest .
+          docker push ghrc.io/quentinlegot/tlc-front:latest
+      - name: "Compile and push api"
+        run: |
+          cd api
+          docker build -t ghrc.io/quentinlegot/tlc-api:latest .
+          docker push ghrc.io/quentinlegot/tlc-api:latest
+      - name: "Compile and push db"
+        run: |
+          cd db
+          docker build -t ghrc.io/quentinlegot/tlc-db:latest .
+          docker push ghrc.io/quentinlegot/tlc-db:latest
   deploy:
     name: Deploy to server
     runs-on: self-hosted
+    needs: build
     steps:
       - uses: actions/checkout@v4
       # - name: Install ansible

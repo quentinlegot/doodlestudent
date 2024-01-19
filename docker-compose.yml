@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   api:
-    build: api
+    image: ghrc.io/quentinlegot/tlc-api:latest
     restart: unless-stopped
     depends_on:
       db:
@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:8080"
   db:
-    build: db
+    image: ghrc.io/quentinlegot/tlc-db:latest
     restart: unless-stopped
     ports:
       - "3306:3306"
@@ -42,7 +42,7 @@ services:
     ports:
       - "2525:25"
   front:
-    build: front
+    image: ghrc.io/quentinlegot/tlc-front:latest
     restart: unless-stopped
     depends_on:
       - "api"
