@@ -59,6 +59,15 @@ services:
     ports:
       - "80:80"
       - "443:443"
+  prometheus:
+    image: bitnami/prometheus:latest
+    restart: unless-restart
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - '3000:3000'
+    volumes:
+      - grafana:/var/lib/grafana
 secrets:
   db_pass:
     file: ./db_pass.txt
@@ -67,3 +76,4 @@ secrets:
 
 volumes:
   db:
+  grafana:
