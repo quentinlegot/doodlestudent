@@ -34,5 +34,5 @@
   command:
     chdir: "/home/{{ user }}/doodle"
     cmd: "docker compose up -d --build --remove-orphans"
-- name: Remove unused docker images
-  command: docker rmi -f $(docker images --filter dangling=true -q)
+# - name: Remove unused docker images
+#   command: docker rmi -f $(docker images --filter dangling=true -q)
