@@ -28,6 +28,12 @@ services:
     restart: unless-stopped
     # ports:
     #   - "9001:9001"
+    environment:
+      - DB_TYPE=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_USER=tlc
+      - DB_PASS=tlc
     volumes:
       - ./api/APIKEY.txt:/opt/etherpad-lite/APIKEY.txt
   myadmin:
@@ -53,16 +59,6 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:ro
-      - ./certbot/www:/var/www/certbot/:ro
-      - ./certbot/conf/:/etc/letsencrypt/:ro
-  certbot:
-    image: certbot/certbot:latest
-    volumes:
-      - ./nginx/conf/:/etc/nginx/conf.d/:rw
-      - ./certbot/www/:/var/www/certbot/:rw
-      - ./certbot/conf/:/etc/letsencrypt/:rw
 secrets:
   db_pass:
     file: ./db_pass.txt
