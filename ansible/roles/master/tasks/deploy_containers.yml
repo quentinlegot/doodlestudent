@@ -26,7 +26,11 @@
 #   docker_compose:
 #     project_src: "/home/{{ user }}/doodle"
 #     build: yes
-- name: (Re)Build and run/restart containers
+- name: Pull images
+  command:
+    chdir: "/home/{{ user }}/doodle"
+    cmd: "docker compose pull"
+- name: run/restart containers
   command:
     chdir: "/home/{{ user }}/doodle"
     cmd: "docker compose up -d --build --remove-orphans"
