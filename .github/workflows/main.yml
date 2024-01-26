@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 jobs:
   build-front:
-    name: Build and deploy on github registry
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -49,10 +48,25 @@ jobs:
           cd db
           docker build -t quentinlegot/tlc-db:latest .
           docker push quentinlegot/tlc-db:latest
+  build-prometheus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Login to registry"
+        run: |
+          export CR_PAT=$TOKEN
+          echo $CR_PAT | docker login -u quentinlegot --password-stdin
+        env:
+          TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: "Compile and push prometheus"
+        run: |
+          cd prometheus
+          docker build -t quentinlegot/tlc-prometheus:latest .
+          docker push quentinlegot/tlc-prometheus:latest
   deploy:
     name: Deploy to server
     runs-on: self-hosted
-    needs: [ build-front, build-api, build-db ]
+    needs: [ build-front, build-api, build-db, build-prometheus ]
     steps:
       - uses: actions/checkout@v4
       # - name: Install ansible

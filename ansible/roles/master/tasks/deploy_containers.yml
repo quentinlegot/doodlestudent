@@ -26,7 +26,7 @@
 #   docker_compose:
 #     project_src: "/home/{{ user }}/doodle"
 #     build: yes
-- name: Pull images
+- name: Pull docker images
   command:
     chdir: "/home/{{ user }}/doodle"
     cmd: "docker compose pull"
@@ -34,3 +34,5 @@
   command:
     chdir: "/home/{{ user }}/doodle"
     cmd: "docker compose up -d --build --remove-orphans"
+- name: Remove unused docker images
+  command: docker rmi $(docker images --filter dangling=true -q)

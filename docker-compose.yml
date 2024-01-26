@@ -57,7 +57,7 @@ services:
       - "80:80"
       - "443:443"
   prometheus:
-    image: bitnami/prometheus:latest
+    image: quentinlegot/tlc-prometheus:latest
     restart: unless-stopped
   grafana:
     image: grafana/grafana:latest
