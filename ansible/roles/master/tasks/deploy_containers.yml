@@ -34,7 +34,3 @@
   command:
     chdir: "/home/{{ user }}/doodle"
     cmd: "docker compose up -d --build --remove-orphans"
-- name: Install certificate
-  command:
-    chdir: "/home/{{ user }}/doodle"
-    cmd: docker compose run --rm  certbot certonly --nginx -n --agree-tos --email legotquentin@gmail.com -d quentinl.diverse-team.fr,quentinl.pad.diverse-team.fr,quentinl.myadmin.diverse-team.fr
