@@ -17,7 +17,7 @@ FROM nginx:latest as runner
 EXPOSE 80
 EXPOSE 443
 
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY app.conf /etc/nginx/conf.d/app.conf
 
 COPY --from=builder /opt/app/dist/tlcfront /usr/share/nginx/html
 
