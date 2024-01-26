@@ -65,7 +65,8 @@ services:
     environment:
       - GF_SERVER_PROTOCOL=http
       - GF_SERVER_DOMAIN=quentinl.diverse-team.fr
-      - GF_SERVER_ROOT_URL=/metrics
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:%(http_port)s/metrics
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
     volumes:
       - grafana:/var/lib/grafana
 secrets:
