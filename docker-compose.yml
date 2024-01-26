@@ -62,7 +62,7 @@ services:
     image: grafana/grafana:latest
     restart: unless-stopped
     environment:
-      - GF_SERVER_ROOT_URL=/metrics
+      - GF_SERVER_ROOT_URL=quentinl.diverse-team.fr/metrics
     volumes:
       - grafana:/var/lib/grafana
 secrets:
