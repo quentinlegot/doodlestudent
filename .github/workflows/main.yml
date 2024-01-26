@@ -3,12 +3,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 jobs:
-  build:
+  build-front:
     name: Build and deploy on github registry
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: "Login to github registry"
+      - name: "Login to registry"
         run: |
           export CR_PAT=$TOKEN
           echo $CR_PAT | docker login -u quentinlegot --password-stdin
@@ -19,11 +19,31 @@ jobs:
           cd front
           docker build -t quentinlegot/tlc-front:latest .
           docker push quentinlegot/tlc-front:latest
+  build-api:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Login to registry"
+        run: |
+          export CR_PAT=$TOKEN
+          echo $CR_PAT | docker login -u quentinlegot --password-stdin
+        env:
+          TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: "Compile and push api"
         run: |
           cd api
           docker build -t quentinlegot/tlc-api:latest .
           docker push quentinlegot/tlc-api:latest
+  build-db:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Login to registry"
+        run: |
+          export CR_PAT=$TOKEN
+          echo $CR_PAT | docker login -u quentinlegot --password-stdin
+        env:
+          TOKEN: ${{ secrets.DOCKER_TOKEN }}
       - name: "Compile and push db"
         run: |
           cd db
@@ -32,7 +52,7 @@ jobs:
   deploy:
     name: Deploy to server
     runs-on: self-hosted
-    needs: build
+    needs: [ build-front, build-api, build-db ]
     steps:
       - uses: actions/checkout@v4
       # - name: Install ansible
