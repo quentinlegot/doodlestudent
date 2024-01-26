@@ -6,13 +6,9 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    ports:
-      - "8080:8080"
   db:
     image: quentinlegot/tlc-db:latest
     restart: unless-stopped
-    ports:
-      - "3306:3306"
     volumes:
       - db:/var/lib/mysql
     environment:
@@ -65,8 +61,6 @@ services:
   grafana:
     image: grafana/grafana:latest
     restart: unless-stopped
-    ports:
-      - '3000:3000'
     volumes:
       - grafana:/var/lib/grafana
 secrets:
