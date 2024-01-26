@@ -22,10 +22,9 @@ scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: "metrics"
     scrape_interval: 15s
-    metrics_path: /
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["http://api:8080", "http://front:80", "http://etherpad:9001", "http://myadmin:80"]
+      - targets: ["api:8080", "front:80", "etherpad:9001", "myadmin:80"]
