@@ -61,9 +61,10 @@ services:
       - "443:443"
   prometheus:
     image: bitnami/prometheus:latest
-    restart: unless-restart
+    restart: unless-stopped
   grafana:
     image: grafana/grafana:latest
+    restart: unless-stopped
     ports:
       - '3000:3000'
     volumes:
