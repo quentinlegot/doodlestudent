@@ -20,16 +20,15 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
-  - job_name: "metrics"
-    scrape_interval: 15s
+  - job_name: "prometheus"
+    scrape_interval: 1m
 
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["api:8080", "quentinl.diverse-team.fr:80", "etherpad:9001", "myadmin:80"]
-remote_write:
-  - url: http://grafana:3000
-    basic_auth:
-      username: admin
-      password: admin
+      - targets: ['localhost:9090']
+  - job_name: 'node'
+    static_configs:
+      - targets:
+          - "node-exporter:9100"
