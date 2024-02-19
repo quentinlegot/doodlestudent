@@ -48,6 +48,21 @@ jobs:
           cd db
           docker build -t quentinlegot/tlc-db:latest .
           docker push quentinlegot/tlc-db:latest
+  build-keycloak:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: "Login to registry"
+        run: |
+          export CR_PAT=$TOKEN
+          echo $CR_PAT | docker login -u quentinlegot --password-stdin
+        env:
+          TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      - name: "Compile and push keycloak"
+        run: |
+          cd keycloak
+          docker build -t quentinlegot/tlc-keycloak:latest .
+          docker push quentinlegot/tlc-keycloak:latest
 
 
           
