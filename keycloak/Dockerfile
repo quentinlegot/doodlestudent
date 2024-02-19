@@ -16,5 +16,5 @@ ENV KC_DB=mariadb
 ENV KC_DB_URL=db
 # ENV KC_DB_USERNAME=tlc
 # ENV KC_DB_PASSWORD=
-ENV KC_HOSTNAME=localhost
+# ENV KC_HOSTNAME=localhost
 ENTRYPOINT ["/opt/keycloak/bin/kc.sh"]
